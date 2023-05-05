@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -67,7 +66,7 @@ public class StudentService {
         boolean exists = studentRepository.existsById(studentId);
         if (!exists) {
             throw new IllegalStateException(
-                    "student with id " + studentId + " does not exists");
+                    "студент с id = " + studentId + " не найден");
         }
         studentRepository.deleteById(studentId);
     }
@@ -78,7 +77,7 @@ public class StudentService {
                 .orElseThrow(() -> new IllegalStateException(
                         "студент с id = " + studentId + " не найден"));
 
-        if (first_name != null && !Objects.equals(student.getFirst_name(), first_name)) {
+        if (first_name != null) {
             if (first_name.matches("\\D*") && first_name.length() > 0) {
                 student.setFirst_name(first_name);
             } else {
@@ -86,7 +85,7 @@ public class StudentService {
             }
         }
 
-        if (last_name != null && !Objects.equals(student.getLast_name(), last_name)) {
+        if (last_name != null) {
             if (last_name.matches("\\D*") && last_name.length() > 0) {
                 student.setLast_name(last_name);
             } else {
@@ -94,7 +93,7 @@ public class StudentService {
             }
         }
 
-        if (dob != null && !Objects.equals(student.getDob(), dob)) {
+        if (dob != null) {
             if (dob.getYear() < LocalDate.now().getYear()) {
                 student.setDob(dob);
             } else {
@@ -102,7 +101,7 @@ public class StudentService {
             }
         }
 
-        if (speciality != null && !Objects.equals(student.getSpeciality(), speciality)) {
+        if (speciality != null) {
             if (speciality.length() > 0) {
                 student.setSpeciality(speciality);
             } else {
@@ -110,7 +109,7 @@ public class StudentService {
             }
         }
 
-        if (email != null && !Objects.equals(student.getEmail(), email)) {
+        if (email != null) {
             Optional<Student> studentOptionalEmail = studentRepository.
                     findStudentByEmail(email);
             if (studentOptionalEmail.isPresent()) {
