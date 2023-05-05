@@ -39,7 +39,7 @@ public class StudentController {
     @PutMapping(path = "{studentId}")
     public void updateStudent(@PathVariable("studentId") Long studentId,
                               @RequestParam(required = false) String first_name,
-                              @RequestParam(required = false) String last_name,
+                              String last_name,
                               LocalDate dob,
                               String speciality,
                               String email)
