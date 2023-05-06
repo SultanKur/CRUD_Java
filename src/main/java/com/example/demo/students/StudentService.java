@@ -25,41 +25,27 @@ public class StudentService {
 
     public void addNewStudent(Student student)
     {
-        if (student.getFirst_name().length() > 0 && student.getFirst_name().matches("\\D*"))
-        {
-            if (student.getLast_name().length() > 0 && student.getLast_name().matches("\\D*"))
-            {
-                Optional<Student> studentOptionalEmail = studentRepository.
-                        findStudentByEmail(student.getEmail());
-                if (studentOptionalEmail.isPresent())
-                {
-                    throw new IllegalStateException("Этот email уже используется ");
-                }
-                if (student.getEmail().endsWith("@narxoz.kz"))
-                {
-                    if (student.getDob().getYear() < LocalDate.now().getYear())
-                    {
-                        studentRepository.save(student);
-                    }
-                    else
-                    {
-                        throw new IllegalStateException("Проверьте дату рождения, вы неверно ввели данные");
-                    }
-                }
-                else
-                {
-                    throw new IllegalStateException("Проверьте правильно ли вы указали почту, она должна быть @narxoz.kz");
-                }
-            }
-            else
-            {
-                throw new IllegalStateException("Вы неверно ввели Фамилию");
-            }
+        if (student.getFirst_name().isEmpty() || !student.getFirst_name().matches("\\D*")) {
+            throw new IllegalStateException("Имя должно содержать только буквы");
         }
-        else
-        {
-            throw new IllegalStateException("Вы неверно ввели Имя");
+        if (student.getLast_name().isEmpty() || !student.getLast_name().matches("\\D*")) {
+            throw new IllegalStateException("Фамилия должна содержать только буквы");
         }
+
+        if (!student.getEmail().endsWith("@narxoz.kz")) {
+            throw new IllegalStateException("Электронная почта должна быть @narxoz.kz");
+        }
+
+        Optional<Student> studentOptionalEmail = studentRepository.findStudentByEmail(student.getEmail());
+        if (studentOptionalEmail.isPresent()) {
+            throw new IllegalStateException("Этот email уже используется ");
+        }
+
+        if (student.getDob().getYear() >= LocalDate.now().getYear()) {
+            throw new IllegalStateException("Проверьте дату рождения, вы неверно ввели данные");
+        }
+
+        studentRepository.save(student);
     }
 
     public void deleteStudent(Long studentId) {
